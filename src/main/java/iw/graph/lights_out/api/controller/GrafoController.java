@@ -1,5 +1,7 @@
 package iw.graph.lights_out.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import iw.graph.lights_out.api.mapper.GrafoMapper;
 import iw.graph.lights_out.api.model.input.GrafoInput;
 import iw.graph.lights_out.api.model.out.GrafoDTO;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/grafos")
+@SecurityRequirement(name = "security")
+@Tag(name = "Grafo")
 public class GrafoController {
 
     private final GrafoService grafoService;
