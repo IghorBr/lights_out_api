@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "ee105fab-600f-4453-9733-11418cf94908",
+		"name": "Lights Out",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16673798"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Get Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"access_token\", jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "lights_out_api_solver",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "lights_out_ui",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "READ WRITE",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/oauth2/token",
+							"host": [
+								"{{LOCAL_URL}}"
+							],
+							"path": [
+								"{{LOCAL_URI}}",
+								"oauth2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Grafos",
+			"item": [
+				{
+					"name": "GET SOLVED",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/grafos/solved",
+							"host": [
+								"{{LOCAL_URL}}"
+							],
+							"path": [
+								"{{LOCAL_URI}}",
+								"grafos",
+								"solved"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/grafos",
+							"host": [
+								"{{LOCAL_URL}}"
+							],
+							"path": [
+								"{{LOCAL_URI}}",
+								"grafos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"numeroVertices\": 4,\r\n    \"matriz\": [0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/grafos?solve=false",
+							"host": [
+								"{{LOCAL_URL}}"
+							],
+							"path": [
+								"{{LOCAL_URI}}",
+								"grafos"
+							],
+							"query": [
+								{
+									"key": "solve",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
