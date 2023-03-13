@@ -1,22 +1,34 @@
 package iw.graph.lights_out.domain.service.solver;
 
 import iw.graph.lights_out.domain.model.Grafo;
-import iw.graph.lights_out.domain.model.Solucao;
+import iw.graph.lights_out.domain.model.Progresso;
 import iw.graph.lights_out.domain.model.Vertice;
+import iw.graph.lights_out.domain.service.ProgressoService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+
 @Service
+@RequiredArgsConstructor
 public class ForcaBrutaSolverService implements SolverService {
 
     private static final Logger logger = LoggerFactory.getLogger(ForcaBrutaSolverService.class);
+    private final ProgressoService progressoService;
 
     @Override
-    public Solucao solveLightsOut(Grafo grafo) {
+    @Async
+    public void solveLightsOut(Grafo grafo) {
         var count = 1 << grafo.getVertices().size();
         var stringBuilder = new StringBuilder();
-        Solucao solucao = new Solucao();
+        var totalIteracoes = Math.pow(2, grafo.getVertices().size());
+        var contador = 0;
+
+        Progresso progresso = new Progresso(grafo.getCode());
+        progresso = progressoService.save(progresso);
 
         while (count > 0) {
             grafo.reset();
@@ -32,12 +44,24 @@ public class ForcaBrutaSolverService implements SolverService {
 
             if (grafo.isSolved()) {
                 logger.info(stringBuilder.toString());
-                solucao.addSolucao(stringBuilder.toString());
+                progresso.addSolucao(stringBuilder.toString());
+                progresso.setProgresso(contador * 100 / totalIteracoes);
+
+                progresso = progressoService.save(progresso);
             }
 
-            count --;
+             if (contador % 10 == 0) {
+                progresso.setProgresso(contador * 100 / totalIteracoes);
+                progresso = progressoService.save(progresso);
+             }
+
+            count--;
+            contador++;
         }
 
-        return solucao;
+        progresso.setProgresso(contador * 100 / totalIteracoes);
+        progresso.setDone(true);
+        progresso.setSolvedAt(OffsetDateTime.now());
+        progressoService.save(progresso);
     }
 }

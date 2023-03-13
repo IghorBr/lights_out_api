@@ -9,13 +9,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import iw.graph.lights_out.api.mapper.GrafoMapper;
 import iw.graph.lights_out.api.model.input.GrafoInput;
 import iw.graph.lights_out.api.model.out.GrafoDTO;
+import iw.graph.lights_out.api.model.out.ProgressoDTO;
+import iw.graph.lights_out.api.model.out.ResumoGrafoDTO;
 import iw.graph.lights_out.domain.model.Grafo;
-import iw.graph.lights_out.domain.model.Solucao;
 import iw.graph.lights_out.domain.service.GrafoService;
 import iw.graph.lights_out.domain.service.solver.ForcaBrutaSolverService;
 import iw.graph.lights_out.domain.service.solver.SolverService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.OffsetDateTime;
 
 @RestController
 @RequestMapping("/grafos")
@@ -48,15 +51,21 @@ public class GrafoController {
 
     @GetMapping("/solved")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = GrafoDTO.class)) }),
+            @ApiResponse(responseCode = "200", description = "OK", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ProgressoDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Grafo não encontrado", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class)) }),
             @ApiResponse(responseCode = "401", description = "Usuário não está logado", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class)) }),
             @ApiResponse(responseCode = "403", description = "Usuário não tem autorização", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class)) })
     })
-    public ResponseEntity<Solucao> getGrafoSolved() {
+    public ResponseEntity<ProgressoDTO> getGrafoSolved() {
         Grafo grafo = grafoService.criaGrafoSimples();
-        Solucao solucoes = solverService.solveLightsOut(grafo);
+        solverService.solveLightsOut(grafo);
 
-        return ResponseEntity.ok(solucoes);
+        ProgressoDTO dto = ProgressoDTO.builder()
+                .code(grafo.getCode())
+                .createdAt(OffsetDateTime.now())
+                .build();
+
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping
@@ -66,8 +75,17 @@ public class GrafoController {
     ) {
         Grafo grafo = grafoService.criaGrafoFromMatrizAdjacencia(input);
 
-        if (solve)
-            return ResponseEntity.ok(solverService.solveLightsOut(grafo));
+
+        if (solve) {
+            solverService.solveLightsOut(grafo);
+
+            ResumoGrafoDTO dto = ResumoGrafoDTO.builder()
+                    .code(grafo.getCode())
+                    .createdAt(OffsetDateTime.now())
+                    .build();
+
+            return ResponseEntity.ok(dto);
+        }
         else
             return ResponseEntity.ok(grafoMapper.convertGrafoToDTO(grafo));
     }

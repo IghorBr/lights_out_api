@@ -15,6 +15,7 @@ public class GrafoMapper {
 
     public GrafoDTO convertGrafoToDTO(Grafo grafo) {
         GrafoDTO dto = new GrafoDTO();
+        dto.setCode(grafo.getCode());
 
         for (Vertice v : grafo.getVertices()) {
             Set<String> codeVizinhos = new LinkedHashSet<>();

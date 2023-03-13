@@ -10,6 +10,7 @@ import java.util.Set;
 @Getter @Setter
 public class GrafoDTO {
 
+    private String code;
     private Set<VerticeDTO> vertices = new LinkedHashSet<>();
 
     public void addVertices(VerticeDTO... v) {

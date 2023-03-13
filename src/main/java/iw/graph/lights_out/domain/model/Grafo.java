@@ -1,16 +1,22 @@
 package iw.graph.lights_out.domain.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Getter @Setter
-@NoArgsConstructor
 public class Grafo {
 
+    private String code;
     private List<Vertice> vertices = new ArrayList<>();
+
+    public Grafo() {
+        this.code = UUID.randomUUID().toString();
+    }
 
     public Grafo(Grafo that) {
         this.vertices = that.getVertices();

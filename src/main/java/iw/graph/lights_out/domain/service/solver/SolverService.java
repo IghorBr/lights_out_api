@@ -1,11 +1,9 @@
 package iw.graph.lights_out.domain.service.solver;
 
 import iw.graph.lights_out.domain.model.Grafo;
-import iw.graph.lights_out.domain.model.Solucao;
-
-import java.util.Set;
+import org.springframework.scheduling.annotation.Async;
 
 public interface SolverService {
 
-    Solucao solveLightsOut(Grafo grafo);
+    void solveLightsOut(Grafo grafo);
 }
