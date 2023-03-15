@@ -11,3 +11,4 @@ Executar os seguintes comandos. Necessário java 17.
 ### URL Swagger
 
 * [Swagger](http://localhost:8080/lightsout/swagger-ui/index.html)
+* [Actuator](http://localhost:8080/lightsout/actuator)

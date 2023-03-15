@@ -17,7 +17,7 @@ public class ResourceServerConfiguration {
         http
                 .authorizeHttpRequests(request ->
                         request
-                            .requestMatchers("/swagger-ui/**", "/swagger-ui/oauth2-redirect.html", "/v3/api-docs/**").permitAll()
+                            .requestMatchers("/swagger-ui/**", "/swagger-ui/oauth2-redirect.html", "/v3/api-docs/**", "/actuator/**").permitAll()
                             .anyRequest().authenticated()
                 )
                 .csrf().disable()

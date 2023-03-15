@@ -77,6 +77,18 @@
 			"item": [
 				{
 					"name": "GET SOLVED",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"grafo_code\", jsonData.code);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -91,13 +103,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/grafos/solved",
+							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/{{GRAFOS_PATH}}/solved",
 							"host": [
 								"{{LOCAL_URL}}"
 							],
 							"path": [
 								"{{LOCAL_URI}}",
-								"grafos",
+								"{{GRAFOS_PATH}}",
 								"solved"
 							]
 						}
@@ -106,6 +118,17 @@
 				},
 				{
 					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -120,20 +143,32 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/grafos",
+							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/{{GRAFOS_PATH}}",
 							"host": [
 								"{{LOCAL_URL}}"
 							],
 							"path": [
 								"{{LOCAL_URI}}",
-								"grafos"
+								"{{GRAFOS_PATH}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "POST",
+					"name": "PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"grafo_code\", jsonData.code);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -149,7 +184,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"numeroVertices\": 4,\r\n    \"matriz\": [0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0]\r\n}",
+							"raw": "{\r\n    \"numeroVertices\": 12,\r\n    \"matriz\": [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -157,19 +192,64 @@
 							}
 						},
 						"url": {
-							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/grafos?solve=false",
+							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/{{GRAFOS_PATH}}?solve=true",
 							"host": [
 								"{{LOCAL_URL}}"
 							],
 							"path": [
 								"{{LOCAL_URI}}",
-								"grafos"
+								"{{GRAFOS_PATH}}"
 							],
 							"query": [
 								{
 									"key": "solve",
-									"value": "false"
+									"value": "true"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Progresso",
+			"item": [
+				{
+					"name": "GET PROGRESSO",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_URL}}/{{LOCAL_URI}}/{{PROGRESSO_PATH}}/{{grafo_code}}",
+							"host": [
+								"{{LOCAL_URL}}"
+							],
+							"path": [
+								"{{LOCAL_URI}}",
+								"{{PROGRESSO_PATH}}",
+								"{{grafo_code}}"
 							]
 						}
 					},
